@@ -14,7 +14,7 @@ import EmployerLogin from './components/EmployerLogin';
 import EmployerHome from './components/EmployerHome';
 import ForgotPassword from './components/ForgotPassword';
 import JobDescription from './components/JobDescription';
-
+import UserProvider  from './components/UserProvider';
 
 
 const App = () => {
@@ -49,31 +49,34 @@ const App = () => {
   };
 
   return (
+    <UserProvider> {/* Wrap routes that require user context */}
     <Router>
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login handleLogin={handleLogin} />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/about" element={<About />} />
       
-        <Route path="/employerRegister" element={<RecurterRegister />} />
-        <Route path="/employerlogin" element={<EmployerLogin handleLogin={handleLogin} />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/job/:id" element={<JobDescription jobs={jobs} />} />
-
-        
-        {isLoggedIn ? (
-          <>
-            <Route path="/user" element={<UserHome />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/employer" element={<EmployerHome />} />
-          </>
-        ) : null}
-      </Routes>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login handleLogin={handleLogin} />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/about" element={<About />} />
+  
+          <Route path="/employerRegister" element={<RecurterRegister />} />
+          <Route path="/employerlogin" element={<EmployerLogin handleLogin={handleLogin} />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/job/:id" element={<JobDescription jobs={jobs} />} />
+  
+          {isLoggedIn ? (
+            <>
+              <Route path="/user" element={<UserHome />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/employer" element={<EmployerHome />} />
+            </>
+          ) : null}
+        </Routes>
+     
       <Footer />
     </Router>
+    </UserProvider>
   );
 };
 

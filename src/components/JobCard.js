@@ -4,6 +4,19 @@ import Location from '../images/Location.png'
 import Company from '../images/Company.png'
 import { useNavigate } from 'react-router-dom';
 
+
+
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+
+ 
+
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+
 const JobCard = ({ job }) => {
 
   const navigate = useNavigate();
@@ -12,36 +25,61 @@ const JobCard = ({ job }) => {
     navigate(`/job/${job.id}`); // Use the appropriate URL based on your routes
   };
   return (
-    <div className="job-card-container">
-      <div className="job-card">
-        {/* Company Logo */}
-        <img
-          className="company-logo"
-          src={Company} // Replace with the actual logo image source
-          alt="Company Logo"
-        />
-        <div className="outer-paper">
-          <div className="box-shadow"></div>
-          <h2 className="job-title">{job.title}</h2>
-          <div className="company-location">
-            <p className="company-name">{job.company}</p>
-            <img
-              className="location-image"
-              src={Location} // Replace with the actual image source
-              alt="Location"
+    <Card sx={{ width: 505, height: 244 }}>
+    <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingRight: "24px"
+            }}
+    >
+    <Stack spacing={2}>
+    <Typography variant="body2" color="text.secondary">
+                Full Stack Java Developer
+    </Typography>
+    <Stack direction="row" spacing={1}>
+    <Typography variant="body2" color="text.secondary">
+                  NSEIT
+    </Typography>
+    <Divider orientation="vertical" flexItem />
+    <Stack direction="row" spacing={0.5} alignItems="center">
+    <LocationOnOutlinedIcon fontSize="small" />
+    <Typography variant="body2" color="text.secondary">
+                    Mumbai
+    </Typography>
+    </Stack>
+    </Stack>
+    <Stack direction="row" spacing={6}>
+    <Typography variant="body2" color="text.secondary">
+                  ₹3.5 - 10 LPA
+    </Typography>
+    <Typography variant="body2" color="text.secondary">
+                  4 - 6yrs
+    </Typography>
+    </Stack>
+    <Typography variant="body2" color="text.secondary">
+                Posted on 24 JUL 2023
+    </Typography>
+    </Stack>
+    <img
+              src="/assets/1.jpg"
+              alt="company name"
+              height="64px"
+              width="64px"
             />
-            <p className="location-text">{job.location}</p>
-          </div>
-          <p className="salary-range">{job.salary}</p>
-          <p className="experience">{job.experience}</p>
-          <div className="apply-save-buttons">
-            <button className="apply-button" onClick={handleViewJob}>View Job</button>
-            <button className="save-button">Save</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    </CardContent>
+    <Stack
+            direction="row"
+            spacing={36}
+            sx={{ marginBottom: "12px", paddingRight: "24px" }}
+    >
+    <Button>View Job</Button>
+    <Button>Save Job</Button>
+    </Stack>
+    </Card>
+      );
 };
 
 export default JobCard;

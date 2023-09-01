@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import "../css/Profile.css";
 import Sidebar from "./Sidebar";
 const apiUrl = process.env.REACT_APP_API_BASE_URL;
@@ -7,6 +7,9 @@ const apiUrl = process.env.REACT_APP_API_BASE_URL;
  
 
 const Profile = () => {
+  const navigate = useNavigate();
+
+  const [isProfileUpdated, setIsProfileUpdated] = useState(false);
 
   const [basicDetails, setBasicDetails] = useState({
 
@@ -32,13 +35,13 @@ const Profile = () => {
 
   const [xClassDetails, setXClassDetails] = useState({
 
-    schoolName: "",
+    xschoolName: "",
 
-    board: "",
+    xboard: "",
 
-    percentage: "",
+    xpercentage: "",
 
-    yearOfPassing: "",
+    xyearOfPassing: "",
 
     xCity: "",
 
@@ -52,15 +55,15 @@ const Profile = () => {
 
   const [intermediateDetails, setIntermediateDetails] = useState({
 
-    collegeName: "",
+    icollegeName: "",
 
-    board: "",
+    iboard: "",
 
-    program: "",
+    iprogram: "",
 
-    percentage: "",
+    ipercentage: "",
 
-    yearOfPassing: "",
+    iyearOfPassing: "",
 
     iCity: "",
 
@@ -70,21 +73,21 @@ const Profile = () => {
 
  
 
-  const [engineeringDetails, setEngineeringDetails] = useState({
+  const [graduationDetails, setGraduationDetails] = useState({
 
-    collegeName: "",
+    gcollegeName: "",
 
-    board: "",
+    gboard: "",
 
-    program: "",
+    gprogram: "",
 
-    percentage: "",
+    gpercentage: "",
 
-    yearOfPassing: "",
+    gyearOfPassing: "",
 
-    eCity: "",
+    gCity: "",
 
-    eState: "",
+    gState: "",
 
   });
 
@@ -99,6 +102,7 @@ const Profile = () => {
     },
   ]);
   
+  
 
   const [resumeFile, setResumeFile] = useState(null);
   const [dragging, setDragging] = useState(false);
@@ -112,12 +116,21 @@ const Profile = () => {
     setExperienceDetails(newExperienceDetails);
   };
   const addExperience = () => {
-    setExperienceDetails([...experienceDetails, { company: "", position: "", startDate: "", endDate: "" }]);
+    setExperienceDetails([
+      ...experienceDetails,
+      { company: "", position: "", startDate: "", endDate: "" }
+    ]);
   };
   
+  
   const handleSkillSelect = (skill) => {
-    setSelectedSkill(skill);
+    if (skills.includes(skill)) {
+      setSkills(skills.filter((s) => s !== skill));
+    } else {
+      setSkills([...skills, skill]);
+    }
   };
+  
 
   const handleFileDrop = (e) => {
     e.preventDefault();
@@ -130,46 +143,62 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Prepare data to be sent
     const userData = {
       basicDetails,
       xClassDetails,
       intermediateDetails,
-      engineeringDetails,
+      graduationDetails,
       skills,
       experienceDetails,
     };
-
+  
     try {
       // Send data to the backend using Fetch API
       const response = await fetch(`${apiUrl}/updateProfile`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json', // Set the Content-Type to JSON
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(userData), // Convert data to JSON format
       });
-
       if (response.ok) {
         // Data successfully sent to the backend
-        console.log("Data sent successfully!");
+        console.log('Data sent successfully!');
+        setIsProfileUpdated(true);
+        window.scrollTo(0, 0); // Scroll to the top of the page
+        setTimeout(() => {
+          setIsProfileUpdated(false); // Reset the success message after a delay
+          window.location.reload(); // Reload the page to clear the form
+        }, 100); // Delay for 100 milliseconds
       } else {
         // Handle error case
-        console.error("Failed to send data to the backend");
+        console.error('Failed to send data to the backend');
       }
+      
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.error('An error occurred:', error);
     }
   };
+  
+  
+  
 
   return (
     <div className="profile-container">
       <div className="sidebar">
        <Sidebar />
       </div>
+
+     
     <form className="profile-form-container" onSubmit={handleSubmit}>
        <h1>Update your profile</h1>
+       {isProfileUpdated && (
+        <div className="success-message">
+          Profile updated successfully!
+        </div>
+      )}
       {/* File Upload section */}
       <div className="file-upload-container">
         <p className="Details-name">Upload your resume:</p>
@@ -421,7 +450,7 @@ const Profile = () => {
 
                 placeholder="School Name"
 
-                value={xClassDetails.schoolName}
+                value={xClassDetails.xschoolName}
 
                 onChange={(e) =>
 
@@ -429,7 +458,7 @@ const Profile = () => {
 
                     ...xClassDetails,
 
-                    schoolName: e.target.value,
+                    xschoolName: e.target.value,
 
                   })
 
@@ -447,11 +476,11 @@ const Profile = () => {
 
                 placeholder="Board"
 
-                value={xClassDetails.board}
+                value={xClassDetails.xboard}
 
                 onChange={(e) =>
 
-                  setXClassDetails({ ...xClassDetails, board: e.target.value })
+                  setXClassDetails({ ...xClassDetails, xboard: e.target.value })
 
                 }
 
@@ -471,7 +500,7 @@ const Profile = () => {
 
                 placeholder="Percentage"
 
-                value={xClassDetails.percentage}
+                value={xClassDetails.xpercentage}
 
                 onChange={(e) =>
 
@@ -479,7 +508,7 @@ const Profile = () => {
 
                     ...xClassDetails,
 
-                    percentage: e.target.value,
+                    xpercentage: e.target.value,
 
                   })
 
@@ -497,7 +526,7 @@ const Profile = () => {
 
                 placeholder="Year of passing"
 
-                value={xClassDetails.yearOfPassing}
+                value={xClassDetails.xyearOfPassing}
 
                 onChange={(e) =>
 
@@ -505,7 +534,7 @@ const Profile = () => {
 
                     ...xClassDetails,
 
-                    yearOfPassing: e.target.value,
+                    xyearOfPassing: e.target.value,
 
                   })
 
@@ -613,7 +642,7 @@ const Profile = () => {
 
                 placeholder="Name of college"
 
-                value={intermediateDetails.collegeName}
+                value={intermediateDetails.icollegeName}
 
                 onChange={(e) =>
 
@@ -621,7 +650,7 @@ const Profile = () => {
 
                     ...intermediateDetails,
 
-                    collegeName: e.target.value,
+                    icollegeName: e.target.value,
 
                   })
 
@@ -639,7 +668,7 @@ const Profile = () => {
 
                 placeholder="Board"
 
-                value={intermediateDetails.board}
+                value={intermediateDetails.iboard}
 
                 onChange={(e) =>
 
@@ -647,7 +676,7 @@ const Profile = () => {
 
                     ...intermediateDetails,
 
-                    board: e.target.value,
+                    iboard: e.target.value,
 
                   })
 
@@ -669,7 +698,7 @@ const Profile = () => {
 
                 placeholder="Program"
 
-                value={intermediateDetails.program}
+                value={intermediateDetails.iprogram}
 
                 onChange={(e) =>
 
@@ -677,7 +706,7 @@ const Profile = () => {
 
                     ...intermediateDetails,
 
-                    program: e.target.value,
+                    iprogram: e.target.value,
 
                   })
 
@@ -695,7 +724,7 @@ const Profile = () => {
 
                 placeholder="Percentage"
 
-                value={intermediateDetails.percentage}
+                value={intermediateDetails.ipercentage}
 
                 onChange={(e) =>
 
@@ -703,7 +732,7 @@ const Profile = () => {
 
                     ...intermediateDetails,
 
-                    percentage: e.target.value,
+                    ipercentage: e.target.value,
 
                   })
 
@@ -725,7 +754,7 @@ const Profile = () => {
 
                 placeholder="Year of passing"
 
-                value={intermediateDetails.yearOfPassing}
+                value={intermediateDetails.iyearOfPassing}
 
                 onChange={(e) =>
 
@@ -733,7 +762,7 @@ const Profile = () => {
 
                     ...intermediateDetails,
 
-                    yearOfPassing: e.target.value,
+                    iyearOfPassing: e.target.value,
 
                   })
 
@@ -823,15 +852,15 @@ const Profile = () => {
 
                 placeholder="Name of college"
 
-                value={engineeringDetails.collegeName}
+                value={graduationDetails.gcollegeName}
 
                 onChange={(e) =>
 
-                  setEngineeringDetails({
+                  setGraduationDetails({
 
-                    ...engineeringDetails,
+                    ...graduationDetails,
 
-                    collegeName: e.target.value,
+                    gcollegeName: e.target.value,
 
                   })
 
@@ -849,15 +878,15 @@ const Profile = () => {
 
                 placeholder="Board"
 
-                value={engineeringDetails.board}
+                value={graduationDetails.gboard}
 
                 onChange={(e) =>
 
-                  setEngineeringDetails({
+                  setGraduationDetails({
 
-                    ...engineeringDetails,
+                    ...graduationDetails,
 
-                    board: e.target.value,
+                    gboard: e.target.value,
 
                   })
 
@@ -879,15 +908,15 @@ const Profile = () => {
 
                 placeholder="Program"
 
-                value={engineeringDetails.program}
+                value={graduationDetails.gprogram}
 
                 onChange={(e) =>
 
-                  setEngineeringDetails({
+                  setGraduationDetails({
 
-                    ...engineeringDetails,
+                    ...graduationDetails,
 
-                    program: e.target.value,
+                    gprogram: e.target.value,
 
                   })
 
@@ -905,15 +934,15 @@ const Profile = () => {
 
                 placeholder="Percentage"
 
-                value={engineeringDetails.percentage}
+                value={graduationDetails.gpercentage}
 
                 onChange={(e) =>
 
-                  setEngineeringDetails({
+                  setGraduationDetails({
 
-                    ...engineeringDetails,
+                    ...graduationDetails,
 
-                    percentage: e.target.value,
+                    gpercentage: e.target.value,
 
                   })
 
@@ -935,15 +964,15 @@ const Profile = () => {
 
                 placeholder="Year of Passing"
 
-                value={engineeringDetails.yearOfPassing}
+                value={graduationDetails.gyearOfPassing}
 
                 onChange={(e) =>
 
-                  setEngineeringDetails({
+                  setGraduationDetails({
 
-                    ...engineeringDetails,
+                    ...graduationDetails,
 
-                    yearOfPassing: e.target.value,
+                    gyearOfPassing: e.target.value,
 
                   })
 
@@ -961,15 +990,15 @@ const Profile = () => {
 
                 placeholder="City"
 
-                value={engineeringDetails.eCity}
+                value={graduationDetails.gCity}
 
                 onChange={(e) =>
 
-                  setEngineeringDetails({
+                  setGraduationDetails({
 
-                    ...engineeringDetails,
+                    ...graduationDetails,
 
-                    eCity: e.target.value,
+                    gCity: e.target.value,
 
                   })
 
@@ -991,15 +1020,15 @@ const Profile = () => {
 
                 placeholder="State"
 
-                value={engineeringDetails.eState}
+                value={graduationDetails.GState}
 
                 onChange={(e) =>
 
-                  setEngineeringDetails({
+                  setGraduationDetails({
 
-                    ...engineeringDetails,
+                    ...graduationDetails,
 
-                    eState: e.target.value,
+                    gState: e.target.value,
 
                   })
 
@@ -1017,86 +1046,87 @@ const Profile = () => {
 
      
       <p className="Details-name">Skills:</p>
-<div className="skills-buttons">
+      <div className="skills-buttons">
   <button
-    className={`skill-button ${selectedSkill === "HTML" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("HTML") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("HTML")}
   >
     HTML
   </button>
   <button
-    className={`skill-button ${selectedSkill === "CSS" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("CSS") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("CSS")}
   >
     CSS
   </button>
   <button
-    className={`skill-button ${selectedSkill === "JavaScript" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("JavaScript") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("JavaScript")}
   >
     JavaScript
   </button>
   <button
-    className={`skill-button ${selectedSkill === "Java" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("Java") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("Java")}
   >
     Java
   </button>
   <button
-    className={`skill-button ${selectedSkill === "Python" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("Python") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("Python")}
   >
     Python
   </button>
   <button
-    className={`skill-button ${selectedSkill === "React" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("React") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("React")}
   >
     React
   </button>
   <button
-    className={`skill-button ${selectedSkill === "SQL" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("SQL") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("SQL")}
   >
     SQL
   </button>
   <button
-    className={`skill-button ${selectedSkill === "MongoDB" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("MongoDB") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("MongoDB")}
   >
     MongoDB
   </button>
   <button
-    className={`skill-button ${selectedSkill === "MySQL" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("MySQL") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("MySQL")}
   >
     MySQL
   </button>
   <button
-    className={`skill-button ${selectedSkill === "Bootstrap" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("Bootstrap") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("Bootstrap")}
   >
     Bootstrap
   </button>
   <button
-    className={`skill-button ${selectedSkill === "Vue.js" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("Vue.js") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("Vue.js")}
   >
     Vue.js
   </button>
   <button
-    className={`skill-button ${selectedSkill === "Angular" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("Angular") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("Angular")}
   >
     Angular
   </button>
   <button
-    className={`skill-button ${selectedSkill === "Flutter" ? "active" : ""}`}
+    className={`skill-button ${skills.includes("Flutter") ? "active" : ""}`} type="button"
     onClick={() => handleSkillSelect("Flutter")}
   >
     Flutter
   </button>
 </div>
+
  {/* ...Previous Code... */}
 
 <p className="Details-name">Experience Details:</p>
@@ -1155,6 +1185,7 @@ const Profile = () => {
       <button type="submit">Submit</button>
 
     </form>
+    
     </div>
 
   );

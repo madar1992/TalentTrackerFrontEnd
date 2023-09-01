@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../css/LoginForm.css';
 import ForgotPassword from './ForgotPassword';
+import { useUserContext } from './UserProvider'; 
 
 const Login = ({ handleLogin }) => {
   const [email, setEmail] = useState('');
@@ -12,7 +13,8 @@ const Login = ({ handleLogin }) => {
   const registrationSuccess = location.state?.registrationSuccess;
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
-
+  // Get the setUser function from the UserContext
+  const { setUser } = useUserContext();
  
   const isFormValid = () => {
     if (!email.trim() || !password.trim()) {
@@ -45,8 +47,12 @@ const Login = ({ handleLogin }) => {
 
       setErrorMessage('');
       handleLogin();
+      // Assuming the response.data contains user data
+      const userData = response.data;
 
-      console.log('Login successful', response.data);
+      // Set user data in the context
+      setUser(userData);
+      console.log('Login successful', userData);
 
       if (count === 0) {
         navigate('/admin');
