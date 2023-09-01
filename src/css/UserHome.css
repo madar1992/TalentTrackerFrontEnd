@@ -29,7 +29,7 @@
 .job-cards-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px; /* Adjust the gap between job cards */
+  gap: 15px; /* Adjust the gap between job cards */
   flex: 1; /* Take up remaining space */
   padding-left: 20px;
   margin: 0; /* Remove default margin from the job-cards-container */
