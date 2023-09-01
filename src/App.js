@@ -15,6 +15,7 @@ import EmployerHome from './components/EmployerHome';
 import ForgotPassword from './components/ForgotPassword';
 import JobDescription from './components/JobDescription';
 import UserProvider  from './components/UserProvider';
+import EmployerForgotPassword from './components/EmployerForgotPassword'
 
 
 const App = () => {
@@ -62,6 +63,7 @@ const App = () => {
           <Route path="/employerRegister" element={<RecurterRegister />} />
           <Route path="/employerlogin" element={<EmployerLogin handleLogin={handleLogin} />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/forgot-password-employer" element={<EmployerForgotPassword />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/job/:id" element={<JobDescription jobs={jobs} />} />
   

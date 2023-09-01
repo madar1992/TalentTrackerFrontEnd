@@ -94,7 +94,7 @@ const EmployerLogin = ({ handleLogin }) => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <Link to="/forgot-password" className="forgot-password-link">
+        <Link to="/forgot-password-employer" className="forgot-password-link">
           Forgot Password
         </Link>
         <button type="submit">Login</button>
