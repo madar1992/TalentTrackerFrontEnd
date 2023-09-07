@@ -37,7 +37,7 @@ const ForgotPassword = () => {
   const handleSendOTP = async () => {
     try {
       // Send a request to the server to send an OTP to the provided email
-      const response = await axios.post(`${apiUrl}/verifyEmail`, { email });
+      const response = await axios.post(`${apiUrl}/verifyEmployerEmail`, { email });
 
       if (response.data === 'OTP sent successfully') {
         setOtpSent(true);
@@ -92,7 +92,7 @@ if (!validatePassword(password)) {
 
     try {
       // Send a request to the server to reset the password with the new password
-      const response = await axios.post(`${apiUrl}/reset-password`, {
+      const response = await axios.post(`${apiUrl}/reset-Employer-password`, {
         email,
         password,
         
@@ -118,7 +118,7 @@ if (!validatePassword(password)) {
         
         {resetSuccess ? (
           <div className="success-message">
-            Password reset was done successfully. Please click on JobSeekerLogin to continue
+            Password reset was done successfully. Please click on RecurterLogin to continue
           </div>
         ) : (
           <div>

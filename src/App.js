@@ -13,7 +13,7 @@ import RecurterRegister from './components/RecurterRegister';
 import EmployerLogin from './components/EmployerLogin';
 import EmployerHome from './components/EmployerHome';
 import ForgotPassword from './components/ForgotPassword';
-import JobDescription from './components/JobDescription';
+import JobDetailPage from './components/JobDetailPage';
 import UserProvider  from './components/UserProvider';
 import EmployerForgotPassword from './components/EmployerForgotPassword'
 
@@ -65,7 +65,7 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/forgot-password-employer" element={<EmployerForgotPassword />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/job/:id" element={<JobDescription jobs={jobs} />} />
+          <Route path="/job/:id" element={<JobDetailPage /> } />
   
           {isLoggedIn ? (
             <>

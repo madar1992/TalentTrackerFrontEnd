@@ -1,59 +1,119 @@
-// UserHome.js
-import React from 'react';
+import React, { useState } from 'react';
+
 import Sidebar from './Sidebar';
-import JobCard from './JobCard';
-import '../css/UserHome.css';
 
-const jobs = [
-  {
-    id: 1,
-    title: 'Fullstack Developer',
-    company: 'NSEIT',
-    location: 'Mumbai',
-    salary: '3.5 to 10LPA',
-    experience: '4-6 Yrs',
-  },
-  {
-    id: 2,
-    title: 'Frontend Developer',
-    company: 'ABC Corp',
-    location: 'Bangalore',
-    salary: '5 to 12LPA',
-    experience: '3-5 Yrs',
-  },
-  {
-    id: 3,
-    title: 'Java Developer',
-    company: 'TekWorks',
-    location: 'Vijayawada',
-    salary: '8 to 12LPA',
-    experience: '3-5 Yrs',
-  },
-  {
-    id: 2,
-    title: 'PHP Developer',
-    company: 'Symphonize',
-    location: 'Bangalore',
-    salary: '10 to 12LPA',
-    experience: '3-5 Yrs',
-  },
-  // Add more job data
-];
+import Grid from '@mui/material/Grid';
 
-const UserHome = () => {
+import { styled } from '@mui/material/styles';
+
+import Typography from '@mui/material/Typography';
+
+import Pagination from '@mui/material/Pagination';
+
+import JobsList from './JobsList';
+
+import {Jobs} from './Jobs';
+
+ 
+
+const ContentWrapper = styled('div')({
+
+  padding: (theme) => theme.spacing(2), // Add spacing to the content
+
+});
+
+ 
+
+function UserHome() {
+
+  const [selectedJob, setSelectedJob] = useState(null);
+
+  const jobsPerPage = 6;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+ 
+
+  const handleChangePage = (event, newPage) => {
+
+    setCurrentPage(newPage);
+
+  };
+
+ 
+
+  const startIndex = (currentPage - 1) * jobsPerPage;
+
+  const endIndex = startIndex + jobsPerPage;
+
+  const jobsToDisplay = Jobs.slice(startIndex, endIndex);
+
+ 
+
   return (
-    <div className="user-home">
-      <Sidebar />
-      <div className="main-content">
-        <h1 className="recommended-text">Recommended jobs for you!</h1>
-        <div className="job-cards-container">
-          {jobs.map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))}
-        </div>
-      </div>
-    </div>
+
+    <Grid container spacing={0}>
+
+      <Grid item xs={12} sm={2} sx={{ display: 'flex', justifyContent: 'center', pt: 1, pr: 0 }}>
+
+        <Sidebar />
+
+      </Grid>
+
+ 
+
+      <Grid item xs={12} sm={10} sx={{ display: 'flex' }}>
+
+        <ContentWrapper>
+
+          <Typography variant="h4" className="recommended-text">
+
+            Recommended jobs for you!
+
+          </Typography>
+
+ 
+
+ 
+
+          <JobsList jobs={jobsToDisplay} />
+
+ 
+
+ 
+
+          <div style={{ display: 'flex', marginTop: 'auto', alignSelf: 'flex-end' }}>
+
+            {Jobs.length > jobsPerPage && (
+
+              <Pagination
+
+                count={Math.ceil(Jobs.length / jobsPerPage)}
+
+                page={currentPage}
+
+                onChange={handleChangePage}
+
+                variant="outlined"
+
+                shape="rounded"
+
+              />
+
+            )}
+
+          </div>
+
+        </ContentWrapper>
+
+      </Grid>
+
+    </Grid>
+
   );
-};
+
+}
+
+ 
 
 export default UserHome;
