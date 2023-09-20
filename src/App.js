@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import Login from './components/Login';
@@ -16,10 +16,11 @@ import ForgotPassword from './components/ForgotPassword';
 import JobDetailPage from './components/JobDetailPage';
 import UserProvider  from './components/UserProvider';
 import EmployerForgotPassword from './components/EmployerForgotPassword'
-
+import axios from 'axios';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState('');
   // Example job data
   const jobs = [
     {
@@ -41,18 +42,42 @@ const App = () => {
     // Add more jobs as needed
   ];
 
+ // Check for a valid token in localStorage on component mount
+ useEffect(() => {
+  const jwtToken = localStorage.getItem('jwtToken');
+  if (jwtToken) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+    setIsLoggedIn(true);
+  }
+}, []); // Empty dependency array ensures this effect runs once on component mount
+
   const handleLogin = () => {
     setIsLoggedIn(true);
+    
+    // Retrieve the JWT token from localStorage
+    const jwtToken = localStorage.getItem('jwtToken');
+   
+    // Include the token in the Axios default headers
+    if (jwtToken) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+      
+    }
   };
+  
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    // Remove the JWT token from localStorage
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('userType');
+
   };
+  
 
   return (
     <UserProvider> {/* Wrap routes that require user context */}
     <Router>
-      <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+    <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       
         <Routes>
           <Route path="/" element={<HomePage />} />

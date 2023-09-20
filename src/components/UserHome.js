@@ -13,7 +13,7 @@ import Pagination from '@mui/material/Pagination';
 import JobsList from './JobsList';
 
 import {Jobs} from './Jobs';
-
+import { useLocation } from 'react-router-dom';
  
 
 const ContentWrapper = styled('div')({
@@ -26,7 +26,12 @@ const ContentWrapper = styled('div')({
 
 function UserHome() {
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const success = queryParams.get('success');
   const [selectedJob, setSelectedJob] = useState(null);
+
+ 
 
   const jobsPerPage = 6;
 
@@ -54,6 +59,11 @@ function UserHome() {
 
     <Grid container spacing={0}>
 
+       {success === 'profile-updated' && (
+        <div style={{ backgroundColor: 'green', color: 'white', padding: '10px' }}>
+          Profile updated successfully!
+        </div>
+      )}
       <Grid item xs={12} sm={2} sx={{ display: 'flex', justifyContent: 'center', pt: 1, pr: 0 }}>
 
         <Sidebar />

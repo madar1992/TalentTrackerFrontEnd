@@ -132,7 +132,8 @@ const RecruiterRegister = () => {
       
       setRegistrationInProgress(false);
       if (otpSent && otpVerified) {
-        navigate('/login', { state: { registrationSuccess: true } });
+          
+          navigate('/employerlogin', { state: { registrationSuccess: true } });
       }
     } catch (error) {
       setErrorMessage('Registration failed. Please try again later.');

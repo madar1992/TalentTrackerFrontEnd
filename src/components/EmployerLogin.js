@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../css/LoginForm.css';
 import { Link } from 'react-router-dom';
+import { useUserContext } from './UserProvider';
 
 
 const EmployerLogin = ({ handleLogin }) => {
@@ -13,7 +14,8 @@ const EmployerLogin = ({ handleLogin }) => {
   const registrationSuccess = location.state?.registrationSuccess;
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_BASE_URL;
-
+  const { setUser } = useUserContext();
+  const { setUserType } = useUserContext();
  
 
   const isFormValid = () => {
@@ -21,6 +23,10 @@ const EmployerLogin = ({ handleLogin }) => {
       return false; // Username and password should not be empty or whitespace only
     }
     return true;
+  };
+  // Helper function to set JWT token in localStorage
+  const setJwtToken = (token) => {
+    localStorage.setItem('jwtToken', token);
   };
 
   const handleSubmit = async (e) => {
@@ -48,22 +54,41 @@ const EmployerLogin = ({ handleLogin }) => {
          // Include the selected role in the request
       });
 
-      setErrorMessage('');
-      handleLogin();
-      // Handle the response from the server (e.g., show a success message)
-      console.log('Login successful', response.data);
-      // Show a window alert for successful registration
-     
+      if (response.status === 200) {
+        // Assuming the response.data contains user data
+        const userData = response.data;
+        console.log('this is response ',userData.token);
+        localStorage.setItem('jwtToken', userData.token);
+        // Access and store the JWT token from the Authorization header
+        const jwtToken = response.headers.authorization;
+        localStorage.setItem('userType', userData.userType);
 
-      // Use the navigate function to navigate to the home screen
-      if(count ===0){
-        navigate('/admin');
-      }else{
-        navigate('/employer');
-      }
       
+        // Set JWT token in localStorage
+        //setJwtToken(jwtToken);
 
-    } catch (error) {
+        setErrorMessage('');
+        handleLogin();
+
+        // Set user data in the context
+        setUser(userData);
+        setUserType(userData.userType);
+        console.log('Login successful', userData);
+
+        if (count === 0) {
+          navigate('/admin');
+        } else {
+          navigate('/employer');
+        }
+
+        // You can now use `jwtToken` for making authenticated requests.
+        //console.log('JWT Token:', jwtToken);
+      } 
+      else {
+        setErrorMessage('Login failed. Please check your user name and password.');
+        console.error('Login failed');
+      }
+    }catch (error) {
       setErrorMessage('Login failed. Please check your user name and password.');
       console.error('Login failed', error);
     }

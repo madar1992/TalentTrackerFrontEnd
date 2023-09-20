@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Profile.css";
 import Sidebar from "./Sidebar";
+import axios from "axios";
 const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
  
@@ -9,7 +10,7 @@ const apiUrl = process.env.REACT_APP_API_BASE_URL;
 const Profile = () => {
   const navigate = useNavigate();
 
-  const [isProfileUpdated, setIsProfileUpdated] = useState(false);
+  
 
   const [basicDetails, setBasicDetails] = useState({
 
@@ -155,23 +156,22 @@ const Profile = () => {
     };
   
     try {
-      // Send data to the backend using Fetch API
-      const response = await fetch(`${apiUrl}/updateProfile`, {
-        method: 'POST',
+      // Get the JWT token from local storage
+      const jwtToken = localStorage.getItem('jwtToken');
+       console.log('jwt token',jwtToken);
+      // Make a POST request to the sign-out endpoint on your backend
+      const response = await axios.post(`${apiUrl}/updateProfile`, userData, {
         headers: {
-          'Content-Type': 'application/json', // Set the Content-Type to JSON
+          Authorization: `Bearer ${jwtToken}`, // Include the JWT token in the Authorization header
         },
-        body: JSON.stringify(userData), // Convert data to JSON format
       });
-      if (response.ok) {
+      if (response.status=200) {
         // Data successfully sent to the backend
         console.log('Data sent successfully!');
-        setIsProfileUpdated(true);
-        window.scrollTo(0, 0); // Scroll to the top of the page
-        setTimeout(() => {
-          setIsProfileUpdated(false); // Reset the success message after a delay
-          window.location.reload(); // Reload the page to clear the form
-        }, 100); // Delay for 100 milliseconds
+        
+        // Navigate to the "user" page
+        navigate("/user");
+       
       } else {
         // Handle error case
         console.error('Failed to send data to the backend');
@@ -194,11 +194,7 @@ const Profile = () => {
      
     <form className="profile-form-container" onSubmit={handleSubmit}>
        <h1>Update your profile</h1>
-       {isProfileUpdated && (
-        <div className="success-message">
-          Profile updated successfully!
-        </div>
-      )}
+       
       {/* File Upload section */}
       <div className="file-upload-container">
         <p className="Details-name">Upload your resume:</p>
@@ -1183,6 +1179,8 @@ const Profile = () => {
 
 
       <button type="submit">Submit</button>
+
+  
 
     </form>
     

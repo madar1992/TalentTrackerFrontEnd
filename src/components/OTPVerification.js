@@ -11,6 +11,12 @@ const OTPVerification = ({ email, onOTPVerified, otpVerifyingInProgress, setOTPV
     try {
       setOTPVerifyingInProgress(true); // Start verifying process
       // Send the entered OTP to the backend for verification
+
+      //const params = new URLSearchParams();     
+      //params.append('email', email);                             // Add email as a query parameter    
+      //const url = `${apiUrl}/verify-otp?${params.toString()}`;  // Send the entered OTP and email to the backend for verification    
+      //await axios.post(url, { otp });
+      
       await axios.post(`${apiUrl}/verify-otp`, { email, otp });
       setOTPVerified(true); // Set OTP verified state to true
       onOTPVerified(); // Notify parent component
