@@ -27,7 +27,7 @@ const Register = () => {
   const handleSendOTP = async () => {
     try {
       setOTPSendingInProgress(true); // Set sending OTP in progress
-      await axios.post(`http://localhost:8080/send-otp`, { email });
+      await axios.post('http://localhost:8080/send-otp', { email });
       setOTPSent(true);
       setOTPSendingInProgress(false); // Clear sending OTP in progress
     } catch (error) {
