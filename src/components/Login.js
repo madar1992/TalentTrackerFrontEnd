@@ -43,7 +43,7 @@ const Login = ({ handleLogin }) => {
         loginEndpoint = `http://localhost:8080/adminlogin`; // User login endpoint
       } else {
         count = 1;
-        loginEndpoint = `${apiUrl}/login`; // Admin login endpoint
+        loginEndpoint = `http://localhost:8080/login`; // Admin login endpoint
       }
 
       const response = await axios.post(loginEndpoint, {
